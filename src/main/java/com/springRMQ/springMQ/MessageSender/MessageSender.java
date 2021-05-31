@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException;
 
 @Component
 public class MessageSender implements CommandLineRunner, AutoCloseable {
-    private boolean isUp = true;
+    private boolean isUp = false;
 
     private Connection connection;
     private Channel channel;
@@ -30,22 +30,16 @@ public class MessageSender implements CommandLineRunner, AutoCloseable {
     @Override
     public void run(String... args) throws Exception {
         if (isUp) {
-            try (MessageSender fibonacciRpc = new MessageSender()) {
-                for (int i = 0; i < 32; i++) {
-                    String i_str = Integer.toString(i);
-                    System.out.println(" [x] Requesting fib(" + i_str + ")");
-//                String response = fibonacciRpc.call(i_str);
-                    fibonacciRpc.call(i_str);
-                    System.out.println("Called rpc for " + i_str);
-//                System.out.println(" [.] Got '" + response + "'");
-                }
+            try (MessageSender Rpc = new MessageSender()) {
+                    // vary client names
+                    Rpc.call("client_3" , "message from client_3");
             } catch (IOException | TimeoutException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void call(String message) throws IOException, InterruptedException {
+    public void call(String requestQueueName , String message) throws IOException, InterruptedException {
         final String corrId = UUID.randomUUID().toString();
 
         channel.queueDeclare(requestQueueName, true, false, false, null);
@@ -58,7 +52,7 @@ public class MessageSender implements CommandLineRunner, AutoCloseable {
                 .build();
 
         channel.basicPublish("", requestQueueName, props, message.getBytes("UTF-8"));
-        System.out.println("request published ");
+        System.out.println("request published");
     }
 
     public void close() throws IOException {

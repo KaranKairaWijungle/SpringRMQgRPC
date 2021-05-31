@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageReceiver implements CommandLineRunner {
 
-    private boolean isUp = false; // false -> shows that server is down right now
-    private static final String RPC_QUEUE_NAME = "spring_rpc_queue";
+    private boolean isUp = true; // false -> shows that server is down right now
+
+    // change queue name here
+    private static final String RPC_QUEUE_NAME = "client_1";
 
     private static int fib(int n) {
         if (n == 0) return 0;
@@ -20,7 +22,7 @@ public class MessageReceiver implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if(isUp){
+        if (isUp) {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("localhost");
 
@@ -45,10 +47,7 @@ public class MessageReceiver implements CommandLineRunner {
 
                     try {
                         String message = new String(delivery.getBody(), "UTF-8");
-                        int n = Integer.parseInt(message);
-
-                        System.out.println(" [.] fib(" + message + ")");
-                        response += fib(n);
+                        response = "consumed message from " + RPC_QUEUE_NAME;
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e.toString());
                     } finally {
