@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 @Component
-public class MessageSender implements CommandLineRunner , AutoCloseable{
+public class MessageSender implements CommandLineRunner, AutoCloseable {
     private boolean isUp = true;
 
     private Connection connection;
@@ -44,24 +44,25 @@ public class MessageSender implements CommandLineRunner , AutoCloseable{
             }
         }
     }
-        public void call (String message) throws IOException, InterruptedException {
-            final String corrId = UUID.randomUUID().toString();
 
-            channel.queueDeclare(requestQueueName, true, false, false, null);
-            String replyQueueName = channel.queueDeclare().getQueue();
-            AMQP.BasicProperties props = new AMQP.BasicProperties
-                    .Builder()
-                    .correlationId(corrId)
-                    .replyTo(replyQueueName)
-                    .deliveryMode(2)
-                    .build();
+    public void call(String message) throws IOException, InterruptedException {
+        final String corrId = UUID.randomUUID().toString();
 
-            channel.basicPublish("", requestQueueName, props, message.getBytes("UTF-8"));
-            System.out.println("request published ");
-        }
+        channel.queueDeclare(requestQueueName, true, false, false, null);
+        String replyQueueName = channel.queueDeclare().getQueue();
+        AMQP.BasicProperties props = new AMQP.BasicProperties
+                .Builder()
+                .correlationId(corrId)
+                .replyTo(replyQueueName)
+                .deliveryMode(2)
+                .build();
 
-        public void close () throws IOException {
-            connection.close();
-        }
+        channel.basicPublish("", requestQueueName, props, message.getBytes("UTF-8"));
+        System.out.println("request published ");
+    }
+
+    public void close() throws IOException {
+        connection.close();
+    }
 
 }
