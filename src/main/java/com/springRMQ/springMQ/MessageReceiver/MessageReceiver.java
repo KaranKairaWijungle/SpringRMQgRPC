@@ -10,7 +10,7 @@ public class MessageReceiver implements CommandLineRunner {
     private boolean isUp = true; // false -> shows that server is down right now
 
     // change queue name here
-    private static final String RPC_QUEUE_NAME = "client_1";
+    private static final String RPC_QUEUE_NAME = "client_3";
 
     private static int fib(int n) {
         if (n == 0) return 0;
