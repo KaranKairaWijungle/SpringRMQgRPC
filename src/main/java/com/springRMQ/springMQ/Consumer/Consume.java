@@ -1,28 +1,14 @@
-package com.springRMQ.springMQ.MessageReceiver;
+package com.springRMQ.springMQ.Consumer;
 
 import com.rabbitmq.client.*;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MessageReceiver implements CommandLineRunner {
-
-    private boolean isUp = false; // false -> shows that server is down right now
-
-    // change queue name here
-    private static final String RPC_QUEUE_NAME = "client_3";
-
-    private static int fib(int n) {
-        if (n == 0) return 0;
-        if (n == 1) return 1;
-        return fib(n - 1) + fib(n - 2);
-    }
+public class Consume {
 
 
-    @Override
-    public void run(String... args) throws Exception {
+    public void consume(String RPC_QUEUE_NAME) throws Exception {
 
-        if (isUp) {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("localhost");
 
@@ -47,7 +33,9 @@ public class MessageReceiver implements CommandLineRunner {
 
                     try {
                         String message = new String(delivery.getBody(), "UTF-8");
-                        response = "consumed message from " + RPC_QUEUE_NAME;
+                        response = "consumed message from " + RPC_QUEUE_NAME + " Message is : " + message;
+                        System.out.println(response);
+
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e.toString());
                     } finally {
@@ -60,8 +48,9 @@ public class MessageReceiver implements CommandLineRunner {
                     }
                 };
 
-                channel.basicConsume(RPC_QUEUE_NAME, false, deliverCallback, (consumerTag -> {
+                String tag = channel.basicConsume(RPC_QUEUE_NAME, false, deliverCallback, (consumerTag -> {
                 }));
+                channel.basicCancel(tag);
                 // Wait and be prepared to consume the message from RPC client.
                 while (true) {
                     synchronized (monitor) {
@@ -73,7 +62,7 @@ public class MessageReceiver implements CommandLineRunner {
                     }
                 }
             }
-        }
 
     }
+
 }
