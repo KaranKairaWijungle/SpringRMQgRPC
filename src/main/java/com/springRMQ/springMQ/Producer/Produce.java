@@ -38,6 +38,8 @@ public class Produce {
 
         channel.basicPublish("", requestQueueName, props, message.getBytes("UTF-8"));
         System.out.println("request published");
+
+
     }
 
     public void close() throws IOException {
