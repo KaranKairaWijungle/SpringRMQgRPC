@@ -3,7 +3,7 @@ package com.springRMQ.springMQ.Consumer;
 import com.rabbitmq.client.*;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.log4j.BasicConfigurator;
+//import org.apache.log4j.BasicConfigurator;
 import org.springframework.stereotype.Component;
 
 
@@ -19,7 +19,7 @@ public class Consume {
     javax.jms.ConnectionFactory connectionFactory;
     Session session;
     public Consume() throws JMSException {
-        BasicConfigurator.configure();
+//        BasicConfigurator.configure();
 
         connectionFactory = new ActiveMQConnectionFactory(url);
         connection = connectionFactory.createConnection();

@@ -13,7 +13,7 @@ import javax.jms.*;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.log4j.BasicConfigurator;
+//import org.apache.log4j.BasicConfigurator;
 
 @Component
 public class Produce {
@@ -26,7 +26,7 @@ public class Produce {
 
     public Produce() throws IOException, TimeoutException, JMSException {
 
-        BasicConfigurator.configure();
+//        BasicConfigurator.configure();
 
         connectionFactory = new ActiveMQConnectionFactory(url);
         connection = connectionFactory.createConnection();
