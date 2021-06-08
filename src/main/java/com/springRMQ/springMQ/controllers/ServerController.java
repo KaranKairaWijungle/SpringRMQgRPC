@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.jms.JMSException;
 import java.io.IOException;
 import java.time.LocalTime;
 
@@ -36,7 +37,7 @@ public class ServerController  {
     }
 
     @RequestMapping("/server/send/client/{id}")
-    public String send_to_client(@PathVariable String id,Model model) throws IOException {
+    public String send_to_client(@PathVariable String id,Model model) throws IOException, JMSException {
         String message = " Called producer for client " + id + " at time  " + LocalTime.now() + " from server ";
         String requestQueueName = "web_client_" + id;
         model.addAttribute("message" , message);

@@ -1,59 +1,45 @@
 package com.springRMQ.springMQ.Consumer;
 
 import com.rabbitmq.client.*;
+import org.apache.activemq.ActiveMQConnection;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.log4j.BasicConfigurator;
 import org.springframework.stereotype.Component;
 
+
+import javax.jms.*;
+import javax.jms.Connection;
 import java.util.concurrent.TimeoutException;
 
 @Component
 public class Consume {
 
+    private static  String url = ActiveMQConnection.DEFAULT_BROKER_URL;
+    private Connection connection;
+    javax.jms.ConnectionFactory connectionFactory;
+    Session session;
+    public Consume() throws JMSException {
+        BasicConfigurator.configure();
+
+        connectionFactory = new ActiveMQConnectionFactory(url);
+        connection = connectionFactory.createConnection();
+        connection.start();
+        session = connection.createSession(false,
+                Session.AUTO_ACKNOWLEDGE);
+    }
 
     public void consume(String RPC_QUEUE_NAME) throws Exception {
 
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("localhost");
+        // Getting the queue named 'test'
+           Destination destination = session.createQueue(RPC_QUEUE_NAME);
 
-            try (Connection connection = factory.newConnection();
-                 Channel channel = connection.createChannel()) {
-                channel.queueDeclare(RPC_QUEUE_NAME, true, false, false, null);
+        // MessageConsumer is used for receiving (consuming) messages
+        MessageConsumer consumer = session.createConsumer(destination);
 
-                System.out.println(" [x] Awaiting RPC requests");
+        // Here we receive the message.
+        Message message = consumer.receive();
 
-                while(channel.queueDeclare(RPC_QUEUE_NAME, true, false, false, null).getMessageCount() > 0) {
-
-                    channel.basicQos(1);
-
-
-                    DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                        AMQP.BasicProperties replyProps = new AMQP.BasicProperties
-                                .Builder()
-                                .correlationId(delivery.getProperties().getCorrelationId())
-                                .deliveryMode(2)
-                                .build();
-
-                        String response = "";
-
-                        try {
-                            String message = new String(delivery.getBody(), "UTF-8");
-                            response = "consumed message from " + RPC_QUEUE_NAME + " Message is : " + message;
-                            System.out.println(response);
-
-                        } catch (RuntimeException e) {
-                            System.out.println(" [.] " + e.toString());
-                        } finally {
-                            channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, response.getBytes("UTF-8"));
-                            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-
-                        }
-                    };
-
-                    String tag = channel.basicConsume(RPC_QUEUE_NAME, false, deliverCallback, (consumerTag -> {
-                    }));
-                    channel.basicCancel(tag);
-                }
-
-            }
+        connection.close();
 
     }
 
