@@ -30,7 +30,7 @@ public class ServerController  {
     @RequestMapping("/server/consume/client/{id}")
     public String consume_client(@PathVariable String id, Model model) throws Exception {
         System.out.println("sever consume " + id);
-        String queueName = "web_client_" + id;
+        String queueName = "AMQ_web_client_" + id;
         consume.consume(queueName);
 
         return "Home/home";
@@ -39,7 +39,7 @@ public class ServerController  {
     @RequestMapping("/server/send/client/{id}")
     public String send_to_client(@PathVariable String id,Model model) throws IOException, JMSException {
         String message = " Called producer for client " + id + " at time  " + LocalTime.now() + " from server ";
-        String requestQueueName = "web_client_" + id;
+        String requestQueueName = "AMQ_web_client_" + id;
         model.addAttribute("message" , message);
         model.addAttribute("id" , id);
         produce.call(requestQueueName , message);

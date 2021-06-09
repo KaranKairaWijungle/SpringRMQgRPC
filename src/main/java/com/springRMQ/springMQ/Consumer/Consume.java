@@ -1,6 +1,5 @@
 package com.springRMQ.springMQ.Consumer;
 
-import com.rabbitmq.client.*;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 //import org.apache.log4j.BasicConfigurator;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.jms.*;
 import javax.jms.Connection;
-import java.util.concurrent.TimeoutException;
 
 @Component
 public class Consume {

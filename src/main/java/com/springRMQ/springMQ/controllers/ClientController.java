@@ -30,7 +30,7 @@ public class ClientController {
         String message = " Called producer for client " + id + " at time  " + LocalTime.now();
         model.addAttribute("id" , id);
         model.addAttribute("message" , message);
-        String requestQueueName = "web_client_" + id;
+        String requestQueueName = "AMQ_web_client_" + id;
         produce.call(requestQueueName , message);
         return "Client/client" ;
     }
