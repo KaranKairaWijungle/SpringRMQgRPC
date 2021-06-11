@@ -20,22 +20,27 @@ public class Consume {
 //        BasicConfigurator.configure();
 
         connectionFactory = new ActiveMQConnectionFactory(url);
-        connection = connectionFactory.createConnection();
-        connection.start();
-        session = connection.createSession(false,
-                Session.AUTO_ACKNOWLEDGE);
+//        connection = connectionFactory.createConnection();
+//        connection.start();
+//        session = connection.createSession(false,
+//                Session.AUTO_ACKNOWLEDGE);
     }
 
     public void consume(String RPC_QUEUE_NAME) throws Exception {
 
-        // Getting the queue named 'test'
+
+        connection = connectionFactory.createConnection();
+        connection.start();
+        session = connection.createSession(false,
+                Session.AUTO_ACKNOWLEDGE);
+        // Getting the queue named 'RPC_QUEUE_NAME'
            Destination destination = session.createQueue(RPC_QUEUE_NAME);
 
         // MessageConsumer is used for receiving (consuming) messages
         MessageConsumer consumer = session.createConsumer(destination);
 
         // Here we receive the message.
-        Message message = consumer.receive();
+        Message message = consumer.receive(10000);
 
         connection.close();
 

@@ -29,9 +29,10 @@ public class ServerController  {
 
     @RequestMapping("/server/consume/client/{id}")
     public String consume_client(@PathVariable String id, Model model) throws Exception {
-        System.out.println("sever consume " + id);
+
         String queueName = "AMQ_web_client_" + id;
         consume.consume(queueName);
+        System.out.println("server consume " + id);
 
         return "Home/home";
     }
