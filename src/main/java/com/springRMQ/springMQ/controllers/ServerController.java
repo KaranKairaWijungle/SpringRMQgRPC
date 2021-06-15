@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.time.LocalTime;
 
 @Controller
-@RequestMapping("/springMQ-0.0.1-SNAPSHOT")
 public class ServerController  {
 
     private final Consume consume;

@@ -13,7 +13,6 @@ import java.time.LocalTime;
 import java.util.concurrent.TimeoutException;
 
 @Controller
-@RequestMapping("/springMQ-0.0.1-SNAPSHOT")
 public class ClientController {
 
     private  Produce produce;
