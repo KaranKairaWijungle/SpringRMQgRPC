@@ -29,20 +29,25 @@ public class Produce {
 //        BasicConfigurator.configure();
 
         connectionFactory = new ActiveMQConnectionFactory(url);
-    //        connection = connectionFactory.createConnection();
-//        connection.start();
-//        session = connection.createSession(false,
-//                Session.AUTO_ACKNOWLEDGE);
 
+/*
+        connection = connectionFactory.createConnection();
+        connection.start();
+        session = connection.createSession(false,
+                Session.AUTO_ACKNOWLEDGE);
 
+*/
     }
     public void call(String requestQueueName , String message) throws IOException, JMSException {
+
 
 
         connection = connectionFactory.createConnection();
         connection.start();
         session = connection.createSession(false,
                 Session.AUTO_ACKNOWLEDGE);
+
+
         //The queue will be created automatically on the server.
         Destination destination = session.createQueue(requestQueueName);
 

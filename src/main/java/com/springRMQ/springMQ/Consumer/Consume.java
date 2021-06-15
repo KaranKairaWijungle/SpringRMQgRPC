@@ -3,6 +3,7 @@ package com.springRMQ.springMQ.Consumer;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 //import org.apache.log4j.BasicConfigurator;
+//import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 
@@ -20,14 +21,16 @@ public class Consume {
 //        BasicConfigurator.configure();
 
         connectionFactory = new ActiveMQConnectionFactory(url);
-//        connection = connectionFactory.createConnection();
-//        connection.start();
-//        session = connection.createSession(false,
-//                Session.AUTO_ACKNOWLEDGE);
+        /*
+        connection = connectionFactory.createConnection();
+        connection.start();
+        session = connection.createSession(false,
+                Session.AUTO_ACKNOWLEDGE);
+
+         */
     }
 
     public void consume(String RPC_QUEUE_NAME) throws Exception {
-
 
         connection = connectionFactory.createConnection();
         connection.start();
